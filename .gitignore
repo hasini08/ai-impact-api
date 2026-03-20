@@ -7,3 +7,4 @@ venv/
 .coverage
 htmlcov/
 ai_impact.db*.db
+*.db
