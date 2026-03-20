@@ -1,302 +1,252 @@
 # AI Impact Claims API
 
-A FastAPI-based REST API for storing, managing, and analysing claims about the impact of artificial intelligence on jobs, creativity, education, ethics, and the environment.
+> **COMP3011 — Web Services and Web Data · Coursework 1**
+> A production-deployed, data-driven RESTful API for storing and analysing claims about the societal impact of artificial intelligence.
 
-This project was developed for coursework and demonstrates backend API development, validation, authentication, testing, analytics, deployment, and structured API design.
-
----
-
-## Live Deployment
-
-- **Live API:** `https://ai-impact-api.onrender.com`
-- **Swagger Docs:** `https://ai-impact-api.onrender.com/docs`
-- **Health Check:** `https://ai-impact-api.onrender.com/health`
+[![Tests](https://github.com/hasini08/ai-impact-api/actions/workflows/tests.yml/badge.svg)](https://github.com/hasini08/ai-impact-api/actions/workflows/tests.yml)
+[![Python](https://img.shields.io/badge/python-3.11-blue)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-teal)](https://fastapi.tiangolo.com)
+[![Live](https://img.shields.io/badge/live-render-brightgreen)](https://ai-impact-api.onrender.com/docs)
 
 ---
 
-## Project Overview
+## 🌐 Live Deployment
 
-The purpose of this API is to provide a structured way to record and analyse claims about AI’s societal and occupational impact.
+| Resource | URL |
+|----------|-----|
+| **Live API** | https://ai-impact-api.onrender.com |
+| **Interactive Docs (Swagger UI)** | https://ai-impact-api.onrender.com/docs |
+| **Health Check** | https://ai-impact-api.onrender.com/health |
 
-Rather than building only a basic CRUD service, this project includes:
-
-- Full CRUD functionality for claims
-- Validation using enums, field constraints, and URL checks
-- API key authentication for write operations
-- Filtering, search, sorting, and pagination
-- Analytics endpoints for category summaries and occupation-level insights
-- Automated testing with `pytest`
-- Continuous integration using GitHub Actions
-- Live deployment on Render
+> The Swagger UI allows you to explore and test all endpoints interactively — no local setup required.
 
 ---
 
-## Features
+## 📋 Project Overview
 
-- Create, read, update, and delete AI impact claims
-- Categorise claims into:
-  - `jobs`
-  - `creativity`
-  - `environment`
-  - `education`
-  - `ethics`
-- Validate request data using Pydantic
-- Require API key authentication for protected endpoints
-- Filter claims by category, occupation code, and verification status
-- Search claims by keyword
-- Sort claims by fields such as impact score
-- Paginate claim results using `skip` and `limit`
-- Analyse claims by category
-- Analyse claims linked to occupational exposure data
-- View interactive documentation through Swagger UI
+The AI Impact Claims API provides a structured way to record, validate, and analyse claims about AI's societal and occupational impact across five domains: **jobs**, **creativity**, **environment**, **education**, and **ethics**.
+
+Rather than a basic CRUD service, this project deliberately extends beyond minimum requirements:
+
+- ✅ Full CRUD with Pydantic v2 schema validation
+- ✅ API key authentication for protected write operations
+- ✅ Rich filtering, keyword search, sorting, and pagination on `GET /claims`
+- ✅ Imported occupational exposure dataset (`ai_exposure_scores` table)
+- ✅ Five analytics endpoints leveraging the exposure dataset
+- ✅ 18 pytest tests covering auth, CRUD, validation, filtering, and analytics
+- ✅ GitHub Actions CI running on every push to `main`
+- ✅ Live deployment on Render with environment-variable configuration
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- **FastAPI** — API framework
-- **SQLAlchemy** — ORM and database access
-- **SQLite** — relational database for coursework scope
-- **Pydantic** — schema validation
-- **Pytest** — automated testing
-- **GitHub Actions** — continuous integration
-- **Render** — deployment platform
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Python** | 3.11 | Runtime |
+| **FastAPI** | 0.110+ | API framework — chosen for automatic Swagger UI and native Pydantic v2 integration |
+| **SQLAlchemy** | 2.x | ORM — separates persistence logic; enables future PostgreSQL migration |
+| **SQLite** | — | Relational database — zero-setup, satisfies SQL requirement for coursework scope |
+| **Pydantic v2** | 2.x | Schema validation — runtime type enforcement, enum constraints, URL validation |
+| **pytest** | 7+ | Automated testing |
+| **GitHub Actions** | — | CI — runs full test suite on push and pull requests |
+| **Render** | — | Cloud deployment platform |
 
 ---
 
-## Project Structure
+## 📁 Repository Structure
 
-```text
+```
 ai-impact-api/
 ├── .github/
 │   └── workflows/
-│       └── tests.yml
+│       └── tests.yml           # GitHub Actions CI — runs pytest on push/PR
 ├── docs/
-│   ├── api-docs.pdf
-│   └── technical-report.pdf
+│   ├── api-docs.pdf            # Swagger UI documentation export
+│   ├── technical-report.pdf    # Technical report (submitted via Minerva)
+│   └── genai-logs/             # Exported GenAI conversation logs (Appendix A)
 ├── scripts/
-│   ├── ai_exposure_sample.csv
-│   └── import_ai_exposure.py
+│   ├── ai_exposure_sample.csv  # Occupational AI exposure dataset (SOC codes + scores)
+│   └── import_ai_exposure.py   # Script to populate ai_exposure_scores table from CSV
+├── slides/
+│   └── presentation.pptx       # Oral examination presentation slides
 ├── tests/
-│   ├── conftest.py
-│   ├── test_analytics.py
-│   ├── test_auth.py
-│   └── test_claims.py
-├── .env.example
-├── .gitignore
-├── database.py
-├── main.py
-├── models.py
-├── README.md
-├── requirements-dev.txt
-├── requirements.txt
-├── schemas.py
-└── security.py
+│   ├── conftest.py             # Pytest fixtures — isolated in-memory test DB
+│   ├── test_analytics.py       # Analytics endpoint tests
+│   ├── test_auth.py            # Authentication tests (valid/invalid/missing key)
+│   └── test_claims.py          # CRUD, filtering, search, pagination tests
+├── .env.example                # Environment variable template (no secrets)
+├── .gitignore                  # Excludes .env, __pycache__, .venv, *.db
+├── database.py                 # SQLAlchemy engine and session configuration
+├── main.py                     # FastAPI app — all route definitions
+├── models.py                   # SQLAlchemy ORM models (Claim, AIExposureScore)
+├── requirements-dev.txt        # Development dependencies (pytest, httpx, etc.)
+├── requirements.txt            # Production dependencies
+├── schemas.py                  # Pydantic schemas (ClaimCreate, ClaimOut, ClaimUpdate)
+└── security.py                 # API key authentication middleware
 ```
 
 ---
 
-## Setup Instructions
+## ⚙️ Local Setup
 
-### 1. Clone the repository
+### Prerequisites
+
+- Python 3.11+
+- Git
+
+### 1 — Clone the repository
 
 ```bash
 git clone https://github.com/hasini08/ai-impact-api.git
 cd ai-impact-api
 ```
 
-### 2. Create and activate a virtual environment
+### 2 — Create and activate a virtual environment
 
-#### macOS / Linux
-
+**macOS / Linux**
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
-#### Windows PowerShell
-
+**Windows PowerShell**
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+### 3 — Install dependencies
 
 ```bash
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 
-### 4. Create the environment variables file
-
-#### macOS / Linux
+### 4 — Configure environment variables
 
 ```bash
+# macOS / Linux
 cp .env.example .env
-```
 
-#### Windows PowerShell
-
-```powershell
+# Windows
 Copy-Item .env.example .env
 ```
 
-Make sure your `.env` file contains:
+Edit `.env` so it contains:
 
 ```env
 API_KEY=super-secret-coursework-key
 DATABASE_URL=sqlite:///./ai_impact.db
 ```
 
-### 5. Run the API locally
+### 5 — Import the exposure dataset (optional but enables analytics)
+
+```bash
+python scripts/import_ai_exposure.py
+```
+
+### 6 — Run the API
 
 ```bash
 uvicorn main:app --reload --port 8001
 ```
 
 Then open:
-
-- **Docs:** `http://127.0.0.1:8001/docs`
-- **Health Check:** `http://127.0.0.1:8001/health`
+- **Swagger UI:** http://127.0.0.1:8001/docs
+- **Health check:** http://127.0.0.1:8001/health
 
 ---
 
-## Authentication
+## 🔐 Authentication
 
-Write endpoints require an API key in the request header:
+Write operations require an API key in the request header:
 
 ```http
 X-API-Key: super-secret-coursework-key
 ```
 
-### Protected Endpoints
+| Endpoint | Auth Required |
+|----------|--------------|
+| `POST /claims` | ✅ Yes |
+| `PATCH /claims/{id}` | ✅ Yes |
+| `DELETE /claims/{id}` | ✅ Yes |
+| All `GET` and analytics endpoints | ❌ No (public) |
 
-- `POST /claims`
-- `PATCH /claims/{claim_id}`
-- `DELETE /claims/{claim_id}`
-
-Read-only endpoints such as `GET /claims` and analytics routes do not require authentication.
-
----
-
-## Data Model
-
-Each claim includes the following fields:
-
-- `id`
-- `title`
-- `category`
-- `description`
-- `source_url`
-- `occupation_code`
-- `verification_status`
-- `impact_score`
-- `source_type`
-- `created_at`
-
-### Category Values
-
-- `jobs`
-- `creativity`
-- `environment`
-- `education`
-- `ethics`
-
-### Verification Status Values
-
-- `unverified`
-- `reviewed`
-- `supported`
-- `disputed`
-
-### Source Type Values
-
-- `article`
-- `report`
-- `blog`
-- `research`
-- `news`
+Missing or invalid key returns `401 Unauthorized`.
 
 ---
 
-## API Endpoints
+## 📡 API Endpoints
 
-### Core Routes
+### Claims (CRUD)
 
-- `GET /` — root endpoint
-- `GET /health` — health check
-- `POST /claims` — create a claim
-- `GET /claims` — retrieve all claims
-- `GET /claims/{claim_id}` — retrieve a single claim
-- `PATCH /claims/{claim_id}` — update a claim
-- `DELETE /claims/{claim_id}` — delete a claim
+| Method | Endpoint | Description | Status Codes |
+|--------|----------|-------------|-------------|
+| `POST` | `/claims` | Create a new claim | 201 / 422 |
+| `GET` | `/claims` | List claims with filtering, search, sort, pagination | 200 |
+| `GET` | `/claims/{id}` | Retrieve a single claim | 200 / 404 |
+| `PATCH` | `/claims/{id}` | Partial update (only provided fields updated) | 200 / 404 / 422 |
+| `DELETE` | `/claims/{id}` | Delete a claim | 204 / 404 |
 
-### Analytics Routes
+### Analytics
 
-- `GET /analytics/high-exposure`
-- `GET /analytics/by-category`
-- `GET /analytics/occupation/{occupation_code}`
-- `GET /analytics/summary`
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/analytics/summary` | Total claims, average impact score, occupation count |
+| `GET` | `/analytics/by-category` | Claim counts grouped by category |
+| `GET` | `/analytics/high-exposure` | Occupations above a configurable `min_score` threshold |
+| `GET` | `/analytics/occupation/{code}` | Claims and exposure data for a specific occupation |
+
+### Other
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/health` | Liveness probe — used by Render for deployment health monitoring |
 
 ---
 
-## Filtering, Search, Sorting, and Pagination
+## 🔍 Filtering, Search, and Pagination
 
-The `GET /claims` endpoint supports the following query parameters:
+The `GET /claims` endpoint supports eight query parameters:
 
-- `category`
-- `occupation_code`
-- `verification_status`
-- `search`
-- `skip`
-- `limit`
-- `sort_by`
-- `sort_order`
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `category` | string | Filter by category enum value |
+| `occupation_code` | string | Filter by occupation code |
+| `verification_status` | string | Filter by verification status |
+| `search` | string | Case-insensitive keyword search across `title` and `description` |
+| `sort_by` | string | Field to sort by (default: `id`) |
+| `sort_order` | string | `asc` or `desc` (default: `desc`) |
+| `skip` | integer | Pagination offset (default: `0`) |
+| `limit` | integer | Page size, max 100 (default: `10`) |
 
-### Example Queries
-
-Filter by category:
-
-```http
-/claims?category=creativity
-```
-
-Filter by verification status:
+**Example — combined query:**
 
 ```http
-/claims?verification_status=reviewed
-```
-
-Search by keyword:
-
-```http
-/claims?search=design
-```
-
-Sort by impact score descending:
-
-```http
-/claims?sort_by=impact_score&sort_order=desc
-```
-
-Paginate results:
-
-```http
-/claims?skip=0&limit=5
-```
-
-Combined example:
-
-```http
-/claims?category=jobs&verification_status=reviewed&limit=5&sort_by=impact_score&sort_order=desc
+GET /claims?category=jobs&verification_status=reviewed&sort_by=impact_score&sort_order=desc&limit=5
 ```
 
 ---
 
-## Example Request
+## 📊 Data Model
 
-### Create Claim Request Body
+### Claim Fields
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | integer | Auto-increment primary key |
+| `title` | string | Required, min 3 characters |
+| `category` | enum | `jobs` \| `creativity` \| `environment` \| `education` \| `ethics` |
+| `description` | string | Required, min 10 characters |
+| `source_url` | URL | Validated by Pydantic `HttpUrl` — rejects malformed URLs |
+| `occupation_code` | string | Optional — links claim to occupational exposure dataset |
+| `verification_status` | enum | `unverified` \| `reviewed` \| `supported` \| `disputed` |
+| `impact_score` | float | Range 0.0–1.0, enforced by Pydantic `Field(ge=0, le=1)` |
+| `source_type` | enum | `article` \| `report` \| `blog` \| `research` \| `news` |
+| `created_at` | datetime | Server-generated UTC timestamp |
+
+### Example Request Body
 
 ```json
 {
@@ -311,7 +261,7 @@ Combined example:
 }
 ```
 
-### Example Successful Response
+### Example Response
 
 ```json
 {
@@ -330,155 +280,121 @@ Combined example:
 
 ### Example Error Responses
 
-Invalid API key:
-
 ```json
+// 401 — Missing or invalid API key
+{ "detail": "Invalid API key" }
+
+// 404 — Resource not found
+{ "detail": "Claim not found" }
+
+// 422 — Validation error (example: impact_score out of range)
 {
-  "detail": "Invalid API key"
+  "detail": [
+    {
+      "loc": ["body", "impact_score"],
+      "msg": "Input should be less than or equal to 1",
+      "type": "less_than_equal"
+    }
+  ]
 }
 ```
 
-Missing resource:
-
-```json
-{
-  "detail": "Claim not found"
-}
-```
-
-Validation errors such as malformed input, invalid enum values, or bad URLs return a `422 Unprocessable Entity` response.
-
 ---
 
-## Analytics
+## 🧪 Testing
 
-### High Exposure Occupations
-
-**Endpoint:** `GET /analytics/high-exposure`
-
-Returns occupations whose AI exposure score is above a chosen threshold.
-
-Example:
-
-```http
-/analytics/high-exposure?min_score=0.7&limit=5
-```
-
-### Claims by Category
-
-**Endpoint:** `GET /analytics/by-category`
-
-Returns grouped counts of claims by category.
-
-### Occupation-Level Analytics
-
-**Endpoint:** `GET /analytics/occupation/{occupation_code}`
-
-Returns:
-
-- Occupation code
-- Claim count
-- Associated claims
-- Exposure score
-- Occupation title
-
-### Summary Analytics
-
-**Endpoint:** `GET /analytics/summary`
-
-Returns:
-
-- Total number of claims
-- Average impact score
-- Total number of occupations in the exposure dataset
-
----
-
-## Testing
-
-This project includes automated tests covering:
-
-- Authentication
-- CRUD operations
-- Validation and error handling
-- Filtering and search
-- Analytics endpoints
-
-### Run Tests Locally
+The test suite covers authentication, CRUD, validation edge cases, filtering, and analytics.
 
 ```bash
+# Run all tests
 pytest -q
+
+# Run with coverage report
+pytest --cov=. --cov-report=term-missing
+
+# Run a specific module
+pytest tests/test_analytics.py -v
 ```
 
-### Run Coverage
+**Current status:** 18 tests passing ✅
 
-```bash
-pytest --cov=.
+| Module | What it tests |
+|--------|--------------|
+| `test_auth.py` | Valid key accepted; missing key returns 401; invalid key returns 401 |
+| `test_claims.py` | Full CRUD lifecycle; partial PATCH; 404 on missing ID; enum validation; pagination boundaries |
+| `test_analytics.py` | Summary aggregation; category grouping; high-exposure threshold filtering |
+
+Tests use an isolated in-memory SQLite database configured in `conftest.py` — no production data is affected.
+
+---
+
+## 🔄 Continuous Integration
+
+GitHub Actions runs the full test suite automatically on every push to `main` and on pull requests:
+
+```yaml
+# .github/workflows/tests.yml
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 ```
 
-At the time of writing, the test suite passes with **18 tests**.
+CI status is visible on the badge at the top of this README.
 
 ---
 
-## Continuous Integration
+## 🚀 Deployment
 
-GitHub Actions is configured to automatically run the test suite on:
+Deployed on **Render** with automatic deployment on push to `main`.
 
-- Every push to `main`
-- Pull requests targeting `main`
+| Setting | Value |
+|---------|-------|
+| Build command | `pip install -r requirements.txt` |
+| Start command | `uvicorn main:app --host 0.0.0.0 --port $PORT` |
+| Environment variables | `API_KEY`, `DATABASE_URL` — set in Render dashboard (not in repo) |
 
-This helps ensure that the API remains stable as the codebase changes.
-
----
-
-## Deployment
-
-The API is deployed on Render.
-
-### Deployment Details
-
-**Build command**
-
-```bash
-pip install -r requirements.txt
-```
-
-**Start command**
-
-```bash
-uvicorn main:app --host 0.0.0.0 --port $PORT
-```
-
-### Live URLs
-
-- **API:** `https://ai-impact-api.onrender.com`
-- **Docs:** `https://ai-impact-api.onrender.com/docs`
-- **Health:** `https://ai-impact-api.onrender.com/health`
+**Live URLs:**
+- API: https://ai-impact-api.onrender.com
+- Docs: https://ai-impact-api.onrender.com/docs
 
 ---
 
-## Limitations
+## ⚠️ Known Limitations
 
-- SQLite is not ideal for large-scale production systems
-- API key authentication does not support user accounts or roles
-- The dataset is limited and could be expanded
-- No frontend dashboard is included
-
----
-
-## Future Improvements
-
-- Migrate from SQLite to PostgreSQL
-- Replace API key authentication with JWT
-- Add rate limiting
-- Add user accounts and roles
-- Expand the dataset
-- Build dashboards or visual analytics
-- Add more advanced claim credibility metrics
+| Limitation | Context |
+|------------|---------|
+| SQLite concurrency | Not suitable for concurrent write operations; PostgreSQL migration path is via `DATABASE_URL` change only |
+| Single API key | No per-user identity or token revocation; JWT is the identified upgrade path |
+| Dataset scope | The exposure CSV is a curated subset; analytics are illustrative rather than statistically representative |
+| Ephemeral storage | SQLite file on Render does not persist across dyno restarts |
 
 ---
 
-## Author
+## 🔮 Future Improvements
 
-**Student:** Hasini Yahampath   
-**Module:** COMP3011 Coursework 1
+- Migrate to **PostgreSQL** (resolves concurrency and persistence — requires only `DATABASE_URL` change due to SQLAlchemy ORM)
+- Replace API key with **JWT authentication** (enables per-user identity and role-based access)
+- Add **rate limiting** via `slowapi` (FastAPI-compatible)
+- Expand the exposure dataset with the full Frey & Osborne or OECD automation probability dataset
+- Add a **frontend dashboard** consuming the analytics endpoints
+
+---
+
+## 📄 Submitted Documents
+
+All submitted materials are available in the `/docs` folder of this repository:
+
+| Document | Location |
+|----------|----------|
+| API Documentation (Swagger export) | `docs/api-docs.pdf` |
+| Technical Report | `docs/technical-report.pdf` |
+| GenAI Conversation Logs | `docs/genai-logs/` |
+| Presentation Slides | `slides/presentation.pptx` |
+
+---
+
+## 👤 Author
+
+**Hasini Yahampath** — COMP3011 Coursework 1, University of Leeds
