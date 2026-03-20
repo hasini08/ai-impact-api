@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from sqlalchemy import func
@@ -58,7 +58,7 @@ def create_claim(
         description=claim.description,
         source_url=str(claim.source_url),
         occupation_code=claim.occupation_code,
-        created_at=datetime.utcnow().isoformat(),
+        created_at=datetime.now(timezone.utc).isoformat(),
         verification_status=claim.verification_status.value,
         impact_score=claim.impact_score,
         source_type=claim.source_type.value,
