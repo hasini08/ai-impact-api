@@ -8,3 +8,4 @@ venv/
 htmlcov/
 ai_impact.db*.db
 *.db
+*.db
