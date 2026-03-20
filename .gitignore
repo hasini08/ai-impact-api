@@ -6,4 +6,4 @@ venv/
 .pytest_cache/
 .coverage
 htmlcov/
-ai_impact.db
+ai_impact.db*.db
