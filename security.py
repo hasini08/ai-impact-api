@@ -4,9 +4,6 @@ from fastapi import Header, HTTPException, status
 
 load_dotenv()
 
-from fastapi import Header, HTTPException, status
-
-
 API_KEY_HEADER_NAME = "X-API-Key"
 DEFAULT_API_KEY = "change-me-in-env"
 
