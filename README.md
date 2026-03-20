@@ -164,3 +164,14 @@ In particular, AI support was used to:
 - draft and improve README content and supporting coursework documents.
 
 All AI-generated suggestions were treated as advisory rather than authoritative. Final code, documentation, and design choices were reviewed, adapted, and tested manually before inclusion in the submission. The final implementation, structure, and submitted materials reflect the author’s own judgement and verification.
+
+## Testing
+
+This project includes automated tests for authentication, CRUD operations, filtering, and analytics.
+
+### Run tests locally
+
+```bash
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+pytest -q
