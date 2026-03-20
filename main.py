@@ -34,9 +34,11 @@ def get_db():
         db.close()
 
 
-@app.get("/")
+from fastapi.responses import RedirectResponse
+
+@app.get("/", include_in_schema=False)
 def root():
-    return {"message": "AI Impact Claims API is running"}
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")
