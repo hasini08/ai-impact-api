@@ -1,20 +1,9 @@
-# Python cache
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-
-# Database files
-*.db
-
-# Virtual environments
+.env
 .venv/
 venv/
-
-# Environment variables
-.env
-
-# OS / editor files
-.DS_Store
-Thumbs.db
-.vscode/
+.pytest_cache/
+.coverage
+htmlcov/
+ai_impact.db
