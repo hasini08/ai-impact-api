@@ -1,11 +1,9 @@
-from datetime import datetime
 from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel, Field, HttpUrl
 
 
-# ---- ENUMS ----
 class CategoryEnum(str, Enum):
     jobs = "jobs"
     creativity = "creativity"
@@ -21,30 +19,40 @@ class VerificationStatusEnum(str, Enum):
     disputed = "disputed"
 
 
-# ---- BASE CLAIM ----
+class SourceTypeEnum(str, Enum):
+    article = "article"
+    report = "report"
+    blog = "blog"
+    research = "research"
+    news = "news"
+
+
 class ClaimBase(BaseModel):
     title: str = Field(..., min_length=5, max_length=200)
     category: CategoryEnum
     description: str = Field(..., min_length=10, max_length=1000)
     source_url: HttpUrl
     occupation_code: Optional[str] = Field(None, min_length=2, max_length=10)
+    verification_status: VerificationStatusEnum = VerificationStatusEnum.unverified
+    impact_score: float = Field(0.5, ge=0.0, le=1.0)
+    source_type: SourceTypeEnum = SourceTypeEnum.article
 
 
-# ---- CREATE ----
 class ClaimCreate(ClaimBase):
     pass
 
 
-# ---- UPDATE ----
 class ClaimUpdate(BaseModel):
     title: Optional[str] = Field(None, min_length=5, max_length=200)
-    category: Optional[CategoryEnum]
+    category: Optional[CategoryEnum] = None
     description: Optional[str] = Field(None, min_length=10, max_length=1000)
-    source_url: Optional[HttpUrl]
+    source_url: Optional[HttpUrl] = None
     occupation_code: Optional[str] = Field(None, min_length=2, max_length=10)
+    verification_status: Optional[VerificationStatusEnum] = None
+    impact_score: Optional[float] = Field(None, ge=0.0, le=1.0)
+    source_type: Optional[SourceTypeEnum] = None
 
 
-# ---- RESPONSE ----
 class ClaimOut(ClaimBase):
     id: int
     created_at: str
@@ -53,7 +61,6 @@ class ClaimOut(ClaimBase):
         from_attributes = True
 
 
-# ---- ANALYTICS ----
 class AIExposureOut(BaseModel):
     occupation_code: str
     occupation_title: str
@@ -61,3 +68,14 @@ class AIExposureOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CategoryCountOut(BaseModel):
+    category: str
+    count: int
+
+
+class SummaryOut(BaseModel):
+    total_claims: int
+    average_impact_score: float
+    total_occupations: int
